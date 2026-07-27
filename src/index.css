@@ -352,9 +352,6 @@ a{color:inherit}
   padding-block:1rem;border-bottom:1px solid var(--line);
 }
 .dl div:first-child{border-top:1px solid var(--line)}
-@media(max-width:619px){
-  .dl div{flex-direction:column;align-items:flex-start;gap:.4rem}
-}
 .dl dt{
   flex:0 0 8.5rem;
   font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;
@@ -363,6 +360,10 @@ a{color:inherit}
 .dl dd{margin:0;font-size:1.05rem}
 .dl a{text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:1px}
 .dl a:hover{color:var(--flame);border-bottom-color:var(--flame)}
+@media(max-width:619px){
+  .dl div{flex-direction:column;flex-wrap:nowrap;align-items:flex-start;gap:.4rem}
+  .dl dt{flex-basis:auto}
+}
 
 /* ---------- footer ---------- */
 .foot{border-top:1px solid var(--line);padding-block:2rem 2.6rem}
