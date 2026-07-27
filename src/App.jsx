@@ -3,7 +3,8 @@ import { gsap, useGSAP } from './lib/gsap'
 import { useSmoothScroll } from './hooks/useSmoothScroll'
 import marijnAanHetWerk from './assets/marijn-aan-het-werk.png'
 
-const EMAIL = 'marijn@vandegroep.nl'
+const EMAIL = 'marijn.groep@gmail.com'
+const WHATSAPP_NUMBER = '31650626510'
 
 const prefersReducedMotion = () =>
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -435,7 +436,7 @@ function Contact() {
           <div>
             <dt>Telefoon</dt>
             <dd>
-              <a href="tel:+31600000000">+31 6 00 00 00 00</a>
+              <a href="tel:+31650626510">+31 6 50 62 65 10</a>
             </dd>
           </div>
           <div>
@@ -451,6 +452,25 @@ function Contact() {
         </dl>
       </div>
     </section>
+  )
+}
+
+function WhatsAppFab() {
+  const message = 'Hallo Marijn, ik wil graag een datum bespreken.'
+  const href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
+
+  return (
+    <a
+      className="fab-whatsapp"
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Chat via WhatsApp"
+    >
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm5.85 14.03c-.25.71-1.45 1.35-2 1.44-.51.08-1.15.11-1.86-.12-.43-.14-.98-.31-1.68-.61-2.96-1.28-4.89-4.24-5.04-4.44-.15-.2-1.2-1.6-1.2-3.05 0-1.45.76-2.16 1.03-2.46.27-.3.59-.37.79-.37.2 0 .39 0 .56.01.18.01.42-.07.66.5.25.6.85 2.07.92 2.22.07.15.12.33.02.53-.1.2-.15.32-.3.49-.15.17-.31.38-.45.51-.15.15-.3.31-.13.61.17.3.76 1.25 1.63 2.02 1.12 1 2.06 1.31 2.36 1.46.3.15.48.13.65-.08.18-.2.75-.87.95-1.17.2-.3.4-.25.68-.15.28.1 1.76.83 2.06.98.3.15.5.23.57.36.08.13.08.75-.17 1.46z" />
+      </svg>
+    </a>
   )
 }
 
@@ -504,6 +524,7 @@ export default function App() {
       </main>
 
       <Footer />
+      <WhatsAppFab />
     </>
   )
 }

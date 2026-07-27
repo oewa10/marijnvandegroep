@@ -366,6 +366,23 @@ a{color:inherit}
 .foot__in{display:flex;flex-wrap:wrap;gap:.5rem 2rem;justify-content:space-between}
 .foot p{margin:0}
 
+/* ---------- whatsapp fab (mobile only) ---------- */
+.fab-whatsapp{
+  display:none;
+  position:fixed;right:1rem;bottom:1rem;z-index:70;
+  align-items:center;justify-content:center;
+  width:52px;height:52px;border-radius:2px;
+  background:var(--flame);border:1px solid var(--flame);color:#fff;
+  box-shadow:0 24px 80px -12px rgb(0 0 0 / .4);
+  transition:background .18s ease,transform .18s ease;
+}
+.fab-whatsapp svg{width:26px;height:26px}
+.fab-whatsapp:hover{background:var(--flame-lift)}
+.fab-whatsapp:active{transform:scale(.94)}
+@media(max-width:759px){
+  .fab-whatsapp{display:inline-flex}
+}
+
 /* ---------- motion ---------- */
 /* Entrances are handled by GSAP (src/App.jsx); elements sit in their final,
    visible state by default so nothing depends on JS running to be seen. */
