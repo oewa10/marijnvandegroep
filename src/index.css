@@ -166,8 +166,11 @@ a{color:inherit}
   font-size:.3em;
   letter-spacing:.16em;
   color:var(--steel);
-  padding-block:.5em .35em;
+  margin-top:.5em;
 }
+/* Groep's line sits at full font-size, so .15em here == the em's .5em above
+   (.5 * .3 == .15) — same visual gap on both sides of "van de". */
+.hero__name em + .line-mask{margin-top:.15em}
 .hero__name .line-mask{padding-bottom:.12em;margin-bottom:-.12em}
 
 .hero__thesis{
