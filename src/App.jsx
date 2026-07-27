@@ -57,7 +57,10 @@ function Hero() {
 
       const tl = gsap.timeline({ defaults: { ease: 'expo.out' } })
 
-      tl.from('.tag', { y: 24, autoAlpha: 0, duration: 0.6 })
+      tl.from(
+        '.hero__grid > div > .tag',
+        { y: 24, autoAlpha: 0, duration: 0.6 },
+      )
         .from(
           '.hero__name .line-mask__inner',
           { yPercent: 110, duration: 1.2, stagger: 0.1 },
@@ -68,15 +71,11 @@ function Hero() {
         .from('.hero__cta', { y: 20, autoAlpha: 0, duration: 0.7 }, '-=0.55')
         .from('.slot--photo', { yPercent: 8, autoAlpha: 0, duration: 1.2 }, '-=0.9')
         .from('.slot__img', { yPercent: 14, scale: 1.2, duration: 1.2 }, '<')
-
-      gsap.from('.meta-row p', {
-        y: 24,
-        autoAlpha: 0,
-        duration: 0.8,
-        ease: 'power3.out',
-        stagger: 0.08,
-        scrollTrigger: { trigger: '.meta-row', start: 'top 92%', once: true },
-      })
+        .from(
+          '.meta-row p',
+          { y: 24, autoAlpha: 0, duration: 0.8, stagger: 0.08 },
+          '-=0.5',
+        )
     },
     { scope: container },
   )
