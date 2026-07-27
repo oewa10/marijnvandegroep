@@ -1,35 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
+import { gsap, useGSAP } from './lib/gsap'
+import { useSmoothScroll } from './hooks/useSmoothScroll'
 import marijnAanHetWerk from './assets/marijn-aan-het-werk.png'
 
 const EMAIL = 'marijn@vandegroep.nl'
 
-/* Voegt .is-in toe zodra een .rise/.stagger element in beeld komt. */
-function useReveal() {
-  useEffect(() => {
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const targets = document.querySelectorAll('.rise, .stagger')
-
-    if (reduce || !('IntersectionObserver' in window)) {
-      targets.forEach((el) => el.classList.add('is-in'))
-      return
-    }
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('is-in')
-            io.unobserve(e.target)
-          }
-        })
-      },
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' },
-    )
-
-    targets.forEach((el) => io.observe(el))
-    return () => io.disconnect()
-  }, [])
-}
+const prefersReducedMotion = () =>
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 /* Zet een rand onder de balk zodra er gescrold wordt. */
 function useStuckBar() {
@@ -47,6 +24,17 @@ function Dot() {
   return <span className="btn__dot" />
 }
 
+function Btn({ href, variant, children }) {
+  const cls = ['btn', variant && `btn--${variant}`].filter(Boolean).join(' ')
+  return (
+    <a className={cls} href={href}>
+      <span aria-hidden className="btn__fill" />
+      <Dot />
+      {children}
+    </a>
+  )
+}
+
 function Header({ stuck }) {
   return (
     <header className={`bar${stuck ? ' is-stuck' : ''}`} id="bar">
@@ -54,23 +42,60 @@ function Header({ stuck }) {
         <a className="mark" href="#top">
           MvdG<span>.</span>
         </a>
-        <a className="btn btn--ghost" href={`mailto:${EMAIL}`}>
-          <Dot />
-          Check een datum
-        </a>
+        <Btn href={`mailto:${EMAIL}`}>Check een datum</Btn>
       </div>
     </header>
   )
 }
 
 function Hero() {
+  const container = useRef(null)
+
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return
+
+      const tl = gsap.timeline({ defaults: { ease: 'expo.out' } })
+
+      tl.from('.tag', { y: 24, autoAlpha: 0, duration: 0.6 })
+        .from(
+          '.hero__name .line-mask__inner',
+          { yPercent: 110, duration: 1.2, stagger: 0.1 },
+          '-=0.3',
+        )
+        .from('.hero__thesis', { y: 28, autoAlpha: 0, duration: 0.8 }, '-=0.5')
+        .from('.hero__body', { y: 28, autoAlpha: 0, duration: 0.8 }, '-=0.6')
+        .from('.hero__cta', { y: 20, autoAlpha: 0, duration: 0.7 }, '-=0.55')
+        .from('.slot--photo', { yPercent: 8, autoAlpha: 0, duration: 1.2 }, '-=0.9')
+        .from('.slot__img', { yPercent: 14, scale: 1.2, duration: 1.2 }, '<')
+
+      gsap.from('.meta-row p', {
+        y: 24,
+        autoAlpha: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+        stagger: 0.08,
+        scrollTrigger: { trigger: '.meta-row', start: 'top 92%', once: true },
+      })
+    },
+    { scope: container },
+  )
+
   return (
-    <section className="hero shell" id="top">
+    <section className="hero shell" id="top" ref={container}>
       <div className="hero__grid">
-        <div className="stagger">
+        <div>
           <p className="tag">Freelance kok — Amersfoort &amp; omgeving</p>
           <h1 className="hero__name">
-            Marijn<em>van de</em>Groep
+            <span className="line-mask">
+              <span className="line-mask__inner">Marijn</span>
+            </span>
+            <em className="line-mask">
+              <span className="line-mask__inner">van de</span>
+            </em>
+            <span className="line-mask">
+              <span className="line-mask__inner">Groep</span>
+            </span>
           </h1>
           <p className="hero__thesis">Ik kook in jouw keuken.</p>
           <p className="hero__body">
@@ -79,18 +104,14 @@ function Hero() {
             achter. Jij schuift aan bij je gasten.
           </p>
           <div className="hero__cta">
-            <a className="btn" href={`mailto:${EMAIL}`}>
-              <Dot />
-              Check een datum
-            </a>
-            <a className="btn btn--ghost" href="#menu">
-              <Dot />
+            <Btn href={`mailto:${EMAIL}`}>Check een datum</Btn>
+            <Btn href="#menu" variant="ghost">
               Bekijk een menu
-            </a>
+            </Btn>
           </div>
         </div>
 
-        <figure className="slot slot--tall slot--photo rise" style={{ margin: 0 }}>
+        <figure className="slot slot--tall slot--photo" style={{ margin: 0 }}>
           <img
             className="slot__img"
             src={marijnAanHetWerk}
@@ -99,7 +120,7 @@ function Hero() {
         </figure>
       </div>
 
-      <div className="meta-row rise">
+      <div className="meta-row">
         <p className="tag">12 jaar in professionele keukens</p>
         <p className="tag">2 – 120 gasten</p>
         <p className="tag">Boekbaar vanaf augustus 2026</p>
@@ -132,9 +153,36 @@ const SERVICES = [
 ]
 
 function Services() {
+  const container = useRef(null)
+
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return
+
+      gsap.from('.services__head > *', {
+        y: 28,
+        autoAlpha: 0,
+        duration: 0.9,
+        ease: 'expo.out',
+        stagger: 0.08,
+        scrollTrigger: { trigger: container.current, start: 'top 78%', once: true },
+      })
+
+      gsap.from('.svc-list .svc', {
+        y: 48,
+        autoAlpha: 0,
+        duration: 0.9,
+        ease: 'expo.out',
+        stagger: { each: 0.08 },
+        scrollTrigger: { trigger: '.svc-list', start: 'top 80%', once: true },
+      })
+    },
+    { scope: container },
+  )
+
   return (
-    <section className="services shell" id="work">
-      <div className="services__head rise">
+    <section className="services shell" id="work" ref={container}>
+      <div className="services__head">
         <p className="tag tag--flame">Wat ik doe</p>
         <h2 className="h2">Vier manieren om mij in te zetten</h2>
         <p className="lede">
@@ -145,7 +193,7 @@ function Services() {
 
       <ul className="svc-list">
         {SERVICES.map((s) => (
-          <li className="svc rise" key={s.name}>
+          <li className="svc" key={s.name}>
             <h3 className="svc__name">{s.name}</h3>
             <p className="svc__desc">{s.desc}</p>
             <p className="svc__price">{s.price}</p>
@@ -173,10 +221,46 @@ const KITCHEN = [
 ]
 
 function Kit() {
+  const container = useRef(null)
+
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return
+
+      gsap.from('.kit__head > *', {
+        y: 28,
+        autoAlpha: 0,
+        duration: 0.9,
+        ease: 'expo.out',
+        stagger: 0.08,
+        scrollTrigger: { trigger: container.current, start: 'top 78%', once: true },
+      })
+
+      gsap.from('.col__title', {
+        y: 20,
+        autoAlpha: 0,
+        duration: 0.7,
+        ease: 'expo.out',
+        stagger: 0.15,
+        scrollTrigger: { trigger: '.kit__grid', start: 'top 78%', once: true },
+      })
+
+      gsap.from('.checklist li', {
+        y: 24,
+        autoAlpha: 0,
+        duration: 0.7,
+        ease: 'expo.out',
+        stagger: { each: 0.06, from: 'start' },
+        scrollTrigger: { trigger: '.kit__grid', start: 'top 72%', once: true },
+      })
+    },
+    { scope: container },
+  )
+
   return (
-    <section className="kit on-dark" id="how">
+    <section className="kit on-dark" id="how" ref={container}>
       <div className="shell">
-        <div className="kit__head rise">
+        <div className="kit__head">
           <p className="tag">Voor de dag zelf</p>
           <h2 className="h2">Wat ik meebreng, wat jij nodig hebt</h2>
           <p className="kit__note">
@@ -187,7 +271,7 @@ function Kit() {
         </div>
 
         <div className="kit__grid">
-          <div className="rise">
+          <div>
             <div className="col__title">
               <span className="col__num">01</span>
               <h3 className="col__h">In mijn tas</h3>
@@ -199,7 +283,7 @@ function Kit() {
             </ul>
           </div>
 
-          <div className="rise">
+          <div>
             <div className="col__title">
               <span className="col__num">02</span>
               <h3 className="col__h">In jouw keuken</h3>
@@ -224,10 +308,48 @@ const COURSES = [
 ]
 
 function Menu() {
+  const container = useRef(null)
+
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return
+
+      gsap.from('.menu__intro > *', {
+        y: 28,
+        autoAlpha: 0,
+        duration: 0.9,
+        ease: 'expo.out',
+        stagger: 0.08,
+        scrollTrigger: { trigger: container.current, start: 'top 75%', once: true },
+      })
+
+      gsap.fromTo(
+        '.menu .card',
+        { clipPath: 'inset(100% 0% 0% 0%)' },
+        {
+          clipPath: 'inset(0% 0% 0% 0%)',
+          duration: 1.1,
+          ease: 'power4.inOut',
+          scrollTrigger: { trigger: '.menu .card', start: 'top 78%', once: true },
+        },
+      )
+
+      gsap.from('.courses li', {
+        y: 20,
+        autoAlpha: 0,
+        duration: 0.7,
+        ease: 'expo.out',
+        stagger: 0.08,
+        scrollTrigger: { trigger: '.courses', start: 'top 68%', once: true },
+      })
+    },
+    { scope: container },
+  )
+
   return (
-    <section className="menu shell" id="menu">
+    <section className="menu shell" id="menu" ref={container}>
       <div className="menu__grid">
-        <div className="rise">
+        <div className="menu__intro">
           <p className="tag tag--flame">Een recent menu</p>
           <h2 className="h2">In juni gekookt, voor acht</h2>
           <p className="lede">
@@ -235,14 +357,13 @@ function Menu() {
             vindt. Dit was een verjaardagsdiner in Amersfoort.
           </p>
           <div className="hero__cta">
-            <a className="btn btn--ghost" href={`mailto:${EMAIL}`}>
-              <Dot />
+            <Btn href={`mailto:${EMAIL}`} variant="ghost">
               Vraag een voorstel aan
-            </a>
+            </Btn>
           </div>
         </div>
 
-        <div className="card rise">
+        <div className="card">
           <div className="card__top">
             <p className="tag" style={{ margin: 0 }}>
               Menu — juni
@@ -266,10 +387,37 @@ function Menu() {
 }
 
 function Contact() {
+  const container = useRef(null)
+
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return
+
+      gsap.from('.contact__intro > *', {
+        y: 28,
+        autoAlpha: 0,
+        duration: 0.9,
+        ease: 'expo.out',
+        stagger: 0.08,
+        scrollTrigger: { trigger: container.current, start: 'top 78%', once: true },
+      })
+
+      gsap.from('.dl > div', {
+        y: 24,
+        autoAlpha: 0,
+        duration: 0.8,
+        ease: 'expo.out',
+        stagger: 0.08,
+        scrollTrigger: { trigger: '.dl', start: 'top 80%', once: true },
+      })
+    },
+    { scope: container },
+  )
+
   return (
-    <section className="contact shell" id="contact">
+    <section className="contact shell" id="contact" ref={container}>
       <div className="contact__grid">
-        <div className="rise">
+        <div className="contact__intro">
           <p className="tag tag--flame">Neem contact op</p>
           <h2 className="h2">Laat me de datum en het aantal gasten weten.</h2>
           <p className="lede">
@@ -278,7 +426,7 @@ function Contact() {
           </p>
         </div>
 
-        <dl className="dl rise">
+        <dl className="dl">
           <div>
             <dt>E-mail</dt>
             <dd>
@@ -308,8 +456,26 @@ function Contact() {
 }
 
 function Footer() {
+  const container = useRef(null)
+
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return
+
+      gsap.from('.foot__in > *', {
+        y: 16,
+        autoAlpha: 0,
+        duration: 0.6,
+        ease: 'power3.out',
+        stagger: 0.08,
+        scrollTrigger: { trigger: container.current, start: 'top 92%', once: true },
+      })
+    },
+    { scope: container },
+  )
+
   return (
-    <footer className="foot">
+    <footer className="foot" ref={container}>
       <div className="shell foot__in">
         <p className="tag">Marijn van de Groep — Freelance kok</p>
         <p className="tag">KvK 00000000 · BTW NL000000000B00</p>
@@ -320,7 +486,7 @@ function Footer() {
 
 export default function App() {
   const stuck = useStuckBar()
-  useReveal()
+  useSmoothScroll()
 
   return (
     <>
