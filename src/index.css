@@ -86,11 +86,27 @@ a{color:inherit}
   display:flex;align-items:center;justify-content:space-between;
   gap:1rem;height:64px;
 }
+.bar__in .btn{white-space:nowrap}
 .mark{
-  font-family:var(--display);font-weight:800;font-stretch:112%;
-  font-size:.95rem;letter-spacing:.02em;text-decoration:none;
+  display:inline-flex;align-items:center;gap:.65rem;
+  color:var(--ink);text-decoration:none;
 }
-.mark span{color:var(--flame)}
+.mark__word{
+  font-family:var(--display);font-weight:850;font-stretch:112%;
+  font-size:1.15rem;line-height:1;letter-spacing:-.025em;
+}
+.mark__dot{color:var(--flame)}
+.mark__company{
+  border-left:1px solid var(--line);padding-left:.65rem;
+  font-family:var(--mono);font-size:.58rem;font-weight:500;
+  line-height:1;letter-spacing:.14em;text-transform:uppercase;
+  white-space:nowrap;color:var(--steel);
+}
+.mark:hover .mark__company{color:var(--flame)}
+@media(max-width:420px){
+  .mark{gap:.5rem}
+  .mark__company{padding-left:.5rem;font-size:.52rem;letter-spacing:.1em}
+}
 
 /* ---------- buttons ---------- */
 .btn{
@@ -232,6 +248,7 @@ a{color:inherit}
 /* ---------- services ---------- */
 .services{padding-block:var(--band)}
 .services__head{max-width:52ch}
+.services__copy{margin-top:1rem}
 .svc-list{
   list-style:none;margin:clamp(2.2rem,4vw,3.2rem) 0 0;padding:0;
   border-top:1px solid var(--line);
@@ -360,6 +377,14 @@ a{color:inherit}
 .dl dd{margin:0;font-size:1.05rem}
 .dl a{text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:1px}
 .dl a:hover{color:var(--flame);border-bottom-color:var(--flame)}
+@media(min-width:620px){
+  .dl div{
+    display:grid;
+    grid-template-columns:8.5rem minmax(0,1fr);
+    column-gap:1.5rem;
+  }
+  .dl dd{min-width:0}
+}
 @media(max-width:619px){
   .dl div{flex-direction:column;flex-wrap:nowrap;align-items:flex-start;gap:.4rem}
   .dl dt{flex-basis:auto}
@@ -369,6 +394,21 @@ a{color:inherit}
 .foot{border-top:1px solid var(--line);padding-block:2rem 2.6rem}
 .foot__in{display:flex;flex-wrap:wrap;gap:.5rem 2rem;justify-content:space-between}
 .foot p{margin:0}
+.foot__legal{display:flex;flex-wrap:wrap;gap:.25rem 1.5rem}
+.foot__legal span + span::before{content:"·";margin-right:1.5rem}
+.foot__link{color:var(--steel);text-decoration:none}
+.foot__link:hover{color:var(--flame)}
+@media(max-width:619px){
+  .foot{padding-block:2rem 3rem}
+  .foot__in{display:grid;gap:.85rem}
+  .foot__legal{
+    display:grid;
+    grid-template-columns:auto minmax(0,1fr);
+    gap:.3rem 1.25rem;
+  }
+  .foot__legal span:first-child{grid-column:1 / -1}
+  .foot__legal span + span::before{content:none}
+}
 
 /* ---------- whatsapp fab (mobile only) ---------- */
 .fab-whatsapp{

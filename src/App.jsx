@@ -40,10 +40,13 @@ function Header({ stuck }) {
   return (
     <header className={`bar${stuck ? ' is-stuck' : ''}`} id="bar">
       <div className="shell bar__in">
-        <a className="mark" href="#top">
-          MvdG<span>.</span>
+        <a className="mark" href="#top" aria-label="MMG Groep B.V. — naar boven">
+          <span className="mark__word">
+            MMG<span className="mark__dot">.</span>
+          </span>
+          <span className="mark__company">Groep B.V.</span>
         </a>
-        <Btn href={`mailto:${EMAIL}`}>Check een datum</Btn>
+        <Btn href={`mailto:${EMAIL}`}>Neem contact op</Btn>
       </div>
     </header>
   )
@@ -104,7 +107,7 @@ function Hero() {
             achter. Jij schuift aan bij je gasten.
           </p>
           <div className="hero__cta">
-            <Btn href={`mailto:${EMAIL}`}>Check een datum</Btn>
+            <Btn href={`mailto:${EMAIL}`}>Vraag beschikbaarheid</Btn>
             <Btn href="#menu" variant="ghost">
               Bekijk een menu
             </Btn>
@@ -123,7 +126,7 @@ function Hero() {
       <div className="meta-row">
         <p className="tag">12 jaar in professionele keukens</p>
         <p className="tag">2 – 120 gasten</p>
-        <p className="tag">Boekbaar vanaf augustus 2026</p>
+        <p className="tag">Boekingen op aanvraag</p>
       </div>
     </section>
   )
@@ -131,24 +134,19 @@ function Hero() {
 
 const SERVICES = [
   {
-    name: 'Privédining',
-    desc: 'Diner aan je eigen tafel, bereid in je eigen keuken. Twee tot veertien personen, drie tot zes gangen.',
-    price: 'vanaf €65 p.p.',
+    name: 'Private dining',
+    desc: 'Een verfijnd diner bij jou thuis, volledig afgestemd op jouw gasten, wensen en gelegenheid.',
+    price: 'op aanvraag',
   },
   {
-    name: 'Evenementen & feesten',
-    desc: 'Verjaardagen, bruiloften en bedrijfsborrels. Walking dinner, buffet of uitgeserveerd, tot 120 gasten.',
+    name: 'Exclusieve catering',
+    desc: 'Culinaire catering op niveau, met aandacht voor smaak, presentatie en kwaliteit.',
     price: 'op aanvraag',
   },
   {
     name: 'Keukenondersteuning',
-    desc: 'Extra handen voor restaurants en cateraars. Mise en place, op de lijn of als vervangend chef, per dag of per service.',
-    price: 'dagtarief €340',
-  },
-  {
-    name: 'Menuontwikkeling',
-    desc: 'Nieuwe gerechten, doorgerekend en getest, met werkbladen die je team zonder mij kan draaien.',
-    price: 'vanaf €850',
+    desc: 'Tijdelijke versterking voor professionele keukens, met ervaring op hoog gastronomisch niveau.',
+    price: 'op aanvraag',
   },
 ]
 
@@ -184,10 +182,15 @@ function Services() {
     <section className="services shell" id="work" ref={container}>
       <div className="services__head">
         <p className="tag tag--flame">Wat ik doe</p>
-        <h2 className="h2">Vier manieren om mij in te zetten</h2>
+        <h2 className="h2">Koken met aandacht voor smaak, presentatie en kwaliteit.</h2>
         <p className="lede">
-          Elke klus begint met een kort gesprek over je gasten, je keuken en je
-          budget. Het menu volgt daaruit.
+          Na de hotelschool verfijnde ik mijn vak in verschillende sterrenrestaurants.
+          Die ervaring neem ik mee in elke opdracht als freelance kok.
+        </p>
+        <p className="lede services__copy">
+          Elke opdracht is maatwerk. Voor prijzen en offertes neem ik graag de
+          tijd om samen de mogelijkheden en een passende culinaire invulling te
+          bespreken.
         </p>
       </div>
 
@@ -419,7 +422,7 @@ function Contact() {
       <div className="contact__grid">
         <div className="contact__intro">
           <p className="tag tag--flame">Neem contact op</p>
-          <h2 className="h2">Laat me de datum en het aantal gasten weten.</h2>
+          <h2 className="h2">Laat mij de datum en het aantal gasten weten.</h2>
           <p className="lede">
             Een eerste reactie duurt meestal een dag. Is de datum dichtbij, bel
             dan liever — ik neem op tussen de services door.
@@ -440,14 +443,20 @@ function Contact() {
             </dd>
           </div>
           <div>
-            <dt>Instagram</dt>
-            <dd>
-              <a href="https://instagram.com/">@marijnkookt</a>
-            </dd>
+            <dt>Bedrijf</dt>
+            <dd>MMG Groep B.V.</dd>
           </div>
           <div>
-            <dt>Werkgebied</dt>
-            <dd>Amersfoort en 60 km daaromheen</dd>
+            <dt>Adres</dt>
+            <dd>Bellefleurgaarde 24, 3824 ZD Amersfoort</dd>
+          </div>
+          <div>
+            <dt>KvK</dt>
+            <dd>97121886</dd>
+          </div>
+          <div>
+            <dt>BTW</dt>
+            <dd>NL867918640B01</dd>
           </div>
         </dl>
       </div>
@@ -497,7 +506,14 @@ function Footer() {
     <footer className="foot" ref={container}>
       <div className="shell foot__in">
         <p className="tag">Marijn van de Groep — Freelance kok</p>
-        <p className="tag">KvK 00000000 · BTW NL000000000B00</p>
+        <div className="tag foot__legal">
+          <span>MMG Groep B.V.</span>
+          <span>KvK 97121886</span>
+          <span>BTW NL867918640B01</span>
+        </div>
+        <a className="tag foot__link" href="https://www.marijnculinair.nl">
+          www.marijnculinair.nl
+        </a>
       </div>
     </footer>
   )
